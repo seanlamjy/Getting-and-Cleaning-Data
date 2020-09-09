@@ -1,0 +1,116 @@
+---
+title: "Week 2 Quiz"
+author: "Sean Lam Jie-Yi"
+date: "9/4/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Question 1
+
+Register an application with the Github API here <https://github.com/settings/applications>. Access the API to get information on your instructors repositories (hint: this is the url you want "<https://api.github.com/users/jtleek/repos>"). Use this data to find the time that the datasharing repo was created. What time was it created?
+
+This tutorial may be useful (<https://github.com/hadley/httr/blob/master/demo/oauth2-github.r>. You may also need to run the code in the base R package and not R studio.
+
+### Answer
+```{r Question 1}
+# Loading packages
+library(httr)
+
+# Finding Oauth endpoints
+oauth_endpoints('github')
+
+# Creating an Oauth application
+myapp <- oauth_app("github",
+                   key = "a69bd13e05b8aef64a29",
+                   secret = "71b0bc6722c1f10b0b06b3688afe08f5efe3b0b7")
+
+# Generating Oauth token
+github_token <- oauth2.0_token(oauth_endpoints("github"), myapp)
+
+# Use API
+req <- GET("https://api.github.com/users/jtleek/repos", config(token = github_token))
+stop_for_status(req)
+output <- content(req)
+
+# Finding 'datasharing'
+datashare <- which(sapply(output, FUN=function(X) "datasharing" %in% X))
+datashare
+
+# Finding when 'datasharing' was created
+list(output[[19]]$name, output[[19]]$created_at)
+```
+
+### Question 2
+
+The sqldf package allows for execution of SQL commands on R data frames. We will use the sqldf package to practice the queries we might send with the dbSendQuery command in RMySQL.
+
+Download the American Community Survey data and load it into an R object called 'acs'
+
+<https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06pid.csv>
+
+Which of the following commands will select only the data for the probability weights pwgtp1 with ages less than 50?
+
+### Answer
+```{r Question 2, results="hide"}
+# Loading packages
+library(sqldf)
+
+# Download file into R Object called 'acs'
+fileUrl1 <- 'https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06pid.csv'
+destfile <- 'C:/Users/seanl/Documents/Github/Cousera/Getting-and-Cleaning-Data/acs.csv'
+download.file(fileUrl1, destfile, method = 'curl')
+acs <- read.csv(destfile)
+
+# Commands for selecting only the data for the probability weights pwgtp1 with ages less than 50
+sqldf("select pwgtp1 from acs where AGEP <50")
+```
+
+### Question 3
+Using the same data frame you created in the previous problem, what is the equivalent function to unique(acs$AGEP)
+
+### Answer
+```{r Question 3, results="hide"}
+# Command for selecting distinct values of AGEP
+sqldf("select distinct AGEP from acs")
+```
+
+### Question 4
+How many characters are in the 10th, 20th, 30th and 100th lines of HTML from this page:
+
+<http://biostat.jhsph.edu/~jleek/contact.html>
+
+(Hint: the nchar() function in R may be helpful)
+
+### Answer
+```{r Question 4}
+# Download and read html file
+fileUrl2 <- url('http://biostat.jhsph.edu/~jleek/contact.html')
+htmlCode <- readLines(fileUrl2)
+
+# Command for finding the number of characters
+c(nchar(htmlCode[10]), nchar(htmlCode[20]), nchar(htmlCode[30]), nchar(htmlCode[100]))
+```
+
+### Question 5 
+Read this data set into R and report the sum of the numbers in the fourth of the nine columns.
+
+<https://d396qusza40orc.cloudfront.net/getdata%2Fwksst8110.for>
+
+Original source of the data: <http://www.cpc.ncep.noaa.gov/data/indices/wksst8110.for>
+
+(Hint this is a fixed width file format)
+
+### Answer
+```{r Question 5}
+# Download and read FOR file
+fileUrl3 <- "https://d396qusza40orc.cloudfront.net/getdata%2Fwksst8110.for"
+SST <- read.fwf(fileUrl3, skip=4, widths=c(12, 7, 4, 9, 4, 9, 4, 9, 4))
+head(SST)
+
+# Command for sum of values of the 4th column
+sum(SST$V4)
+```
