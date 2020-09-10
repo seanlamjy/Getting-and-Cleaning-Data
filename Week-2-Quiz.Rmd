@@ -16,7 +16,7 @@ Register an application with the Github API here <https://github.com/settings/ap
 This tutorial may be useful (<https://github.com/hadley/httr/blob/master/demo/oauth2-github.r>. You may also need to run the code in the base R package and not R studio.
 
 ### Answer
-```{r Question 1}
+```{r Question 1, message=FALSE}
 # Loading packages
 library(httr)
 
@@ -55,7 +55,7 @@ Download the American Community Survey data and load it into an R object called 
 Which of the following commands will select only the data for the probability weights pwgtp1 with ages less than 50?
 
 ### Answer
-```{r Question 2, results="hide"}
+```{r Question 2, message=FALSE, results="hide"}
 # Loading packages
 library(sqldf)
 

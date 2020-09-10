@@ -419,11 +419,9 @@ list(output[[19]]$name, output[[19]]$created_at)</code></pre>
 <div id="answer-1" class="section level3">
 <h3>Answer</h3>
 <pre class="r"><code># Loading packages
-library(sqldf)</code></pre>
-<pre><code>## Loading required package: gsubfn</code></pre>
-<pre><code>## Loading required package: proto</code></pre>
-<pre><code>## Loading required package: RSQLite</code></pre>
-<pre class="r"><code># Download file into R Object called &#39;acs&#39;
+library(sqldf)
+
+# Download file into R Object called &#39;acs&#39;
 fileUrl1 &lt;- &#39;https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06pid.csv&#39;
 destfile &lt;- &#39;C:/Users/seanl/Documents/Github/Cousera/Getting-and-Cleaning-Data/acs.csv&#39;
 download.file(fileUrl1, destfile, method = &#39;curl&#39;)
